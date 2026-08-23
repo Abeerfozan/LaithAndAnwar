@@ -4,11 +4,57 @@ const openButton = document.getElementById('openInvitation');
 const rsvpButton = document.getElementById('rsvpButton');
 const toast = document.getElementById('toast');
 const leafLayer = document.getElementById('floatingLeaves');
+const hero = document.querySelector('.hero');
 
 const motionStyles = document.createElement('link');
 motionStyles.rel = 'stylesheet';
 motionStyles.href = 'swan-motion.css';
 document.head.appendChild(motionStyles);
+
+const musicStyles = document.createElement('link');
+musicStyles.rel = 'stylesheet';
+musicStyles.href = 'music-disc.css';
+document.head.appendChild(musicStyles);
+
+const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
+weddingAudio.loop = true;
+weddingAudio.preload = 'auto';
+weddingAudio.volume = 0.68;
+
+let recordButton = null;
+
+function syncRecordState() {
+  if (!recordButton) return;
+  const isPlaying = !weddingAudio.paused;
+  recordButton.classList.toggle('is-playing', isPlaying);
+  recordButton.setAttribute('aria-label', isPlaying ? 'إيقاف الموسيقى' : 'تشغيل الموسيقى');
+  recordButton.setAttribute('aria-pressed', String(isPlaying));
+}
+
+if (hero) {
+  recordButton = document.createElement('button');
+  recordButton.className = 'record-disc';
+  recordButton.type = 'button';
+  recordButton.setAttribute('aria-label', 'تشغيل الموسيقى');
+  recordButton.setAttribute('aria-pressed', 'false');
+  recordButton.innerHTML = '<img src="assets/images/cd.png" alt="" />';
+  hero.prepend(recordButton);
+
+  recordButton.addEventListener('click', async () => {
+    if (weddingAudio.paused) {
+      try {
+        await weddingAudio.play();
+      } catch (_) {}
+    } else {
+      weddingAudio.pause();
+    }
+    syncRecordState();
+  });
+}
+
+weddingAudio.addEventListener('play', syncRecordState);
+weddingAudio.addEventListener('pause', syncRecordState);
+weddingAudio.addEventListener('ended', syncRecordState);
 
 if (cover) {
   const swanScene = document.createElement('div');
@@ -50,12 +96,17 @@ if (cover) {
   cover.prepend(swanScene);
 }
 
-function openInvitation() {
+async function openInvitation() {
   if (cover.classList.contains('is-open')) return;
   cover.classList.add('is-open');
   invitation.classList.add('visible');
   invitation.setAttribute('aria-hidden', 'false');
   document.body.classList.remove('locked');
+
+  try {
+    await weddingAudio.play();
+  } catch (_) {}
+  syncRecordState();
 
   window.setTimeout(() => {
     document.querySelector('.hero .reveal')?.classList.add('in-view');
