@@ -7,11 +7,6 @@ const leafLayer = document.getElementById('floatingLeaves');
 const hero = document.querySelector('.hero');
 const eventSection = document.querySelector('.event-section');
 
-const motionStyles = document.createElement('link');
-motionStyles.rel = 'stylesheet';
-motionStyles.href = 'swan-motion.css';
-document.head.appendChild(motionStyles);
-
 const musicStyles = document.createElement('link');
 musicStyles.rel = 'stylesheet';
 musicStyles.href = 'music-disc.css';
@@ -91,43 +86,6 @@ if (eventSection) {
 }
 
 if (cover) {
-  const swanScene = document.createElement('div');
-  swanScene.className = 'swan-scene';
-  swanScene.setAttribute('aria-hidden', 'true');
-  swanScene.innerHTML = `
-    <div class="swan-scene__stage">
-      <img class="swan-scene__poster" src="assets/images/swans.png" alt="" />
-      <video
-        class="swan-scene__video"
-        autoplay
-        muted
-        loop
-        playsinline
-        preload="auto"
-        poster="assets/images/swans.png"
-      >
-        <source src="assets/video/swans.mp4" type="video/mp4" />
-      </video>
-    </div>
-    <div class="swan-scene__shade"></div>
-  `;
-
-  const video = swanScene.querySelector('.swan-scene__video');
-  const poster = swanScene.querySelector('.swan-scene__poster');
-
-  const showVideo = () => {
-    swanScene.classList.add('has-video');
-    video?.play().catch(() => {});
-  };
-
-  video?.addEventListener('loadeddata', showVideo, { once: true });
-  video?.addEventListener('canplay', showVideo, { once: true });
-  video?.addEventListener('error', () => {
-    swanScene.classList.remove('has-video');
-    poster?.removeAttribute('hidden');
-  });
-
-  cover.prepend(swanScene);
   cover.classList.add('has-envelope');
 
   const envelopeStage = document.createElement('div');
@@ -135,10 +93,7 @@ if (cover) {
   envelopeStage.innerHTML = `
     <div class="envelope-stage__scene" aria-hidden="true">
       <img class="envelope-stage__base" src="assets/images/envelope.png" alt="" />
-      <div class="envelope-stage__flap">
-        <img class="envelope-stage__flap-front" src="assets/images/envelope.png" alt="" />
-        <span class="envelope-stage__flap-back"></span>
-      </div>
+      <img class="envelope-stage__flap" src="assets/images/envelope.png" alt="" />
     </div>
     <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
       <img src="assets/images/wax.png" alt="" />
@@ -146,31 +101,30 @@ if (cover) {
   `;
 
   const waxButton = envelopeStage.querySelector('.envelope-wax');
+  const flap = envelopeStage.querySelector('.envelope-stage__flap');
   let envelopeOpening = false;
+  let envelopeFinished = false;
+
+  const finishEnvelopeOpening = () => {
+    if (envelopeFinished) return;
+    envelopeFinished = true;
+    envelopeStage.classList.add('is-leaving');
+    openInvitation({ skipAudio: true });
+  };
 
   waxButton?.addEventListener('click', async () => {
     if (envelopeOpening) return;
     envelopeOpening = true;
 
-    /* Start audio on the real user gesture so mobile browsers allow playback. */
     try {
       await weddingAudio.play();
     } catch (_) {}
     syncRecordState();
 
-    /* Phase 1: remove the seal and open ONLY the upper flap. */
     envelopeStage.classList.add('is-opening');
 
-    /* Phase 2 starts only after the flap has reached its fully-open position. */
-    window.setTimeout(() => {
-      envelopeStage.classList.add('envelope-stage--enter');
-    }, 1080);
-
-    /* Phase 3: enter the invitation after the envelope opening is clearly seen. */
-    window.setTimeout(() => {
-      openInvitation({ skipAudio: true });
-      envelopeStage.classList.add('is-done');
-    }, 1600);
+    flap?.addEventListener('animationend', finishEnvelopeOpening, { once: true });
+    window.setTimeout(finishEnvelopeOpening, 1100);
   });
 
   cover.appendChild(envelopeStage);
@@ -229,7 +183,7 @@ function createLeaf() {
   leaf.style.setProperty('--drift', `${Math.round(-80 + Math.random() * 160)}px`);
   leaf.style.animationDuration = `${9 + Math.random() * 7}s`;
   leaf.style.transform = `rotate(${Math.random() * 180}deg) scale(${0.6 + Math.random() * 0.7})`;
-  leafLayer.appendChild(leaf);
+  leafLayer?.appendChild(leaf);
 
   window.setTimeout(() => leaf.remove(), 17000);
 }
