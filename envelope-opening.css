@@ -23,28 +23,24 @@
 
 .envelope-video{z-index:1}
 
-/* The still image hides the paused first frame, then disappears almost instantly. */
+/* The still disappears at the same instant the video starts underneath it. */
 .envelope-still{
   z-index:2;
   pointer-events:none;
   opacity:1;
-  transition:opacity 55ms linear;
+  transition:opacity 35ms linear;
   will-change:opacity;
 }
 
-.envelope-stage.is-switching .envelope-still,
 .envelope-stage.is-playing .envelope-still{
   opacity:0;
-}
-
-.envelope-stage.is-playing .envelope-still{
   visibility:hidden;
 }
 
 .envelope-wax{
   position:absolute;
   left:50%;
-  top:64.5%;
+  top:62.5%;
   z-index:5;
   width:104px;
   aspect-ratio:1;
@@ -54,7 +50,6 @@
   background:transparent;
   transform:translate(-50%,-50%);
   cursor:pointer;
-  filter:drop-shadow(0 9px 13px rgba(55,42,29,.24));
   -webkit-tap-highlight-color:transparent;
   animation:waxPulse 1.55s ease-in-out infinite;
 }
@@ -64,6 +59,9 @@
   width:100%;
   height:100%;
   object-fit:contain;
+  filter:
+    drop-shadow(0 4px 3px rgba(49,34,22,.22))
+    drop-shadow(0 11px 14px rgba(49,34,22,.19));
 }
 
 .envelope-wax::before,
@@ -79,14 +77,11 @@
 
 .envelope-wax::after{animation-delay:.55s}
 
-.envelope-stage.is-switching .envelope-wax,
 .envelope-stage.is-playing .envelope-wax{
   pointer-events:none;
-  animation:waxHide 90ms ease-out forwards;
+  animation:waxHide 85ms ease-out forwards;
 }
 
-.envelope-stage.is-switching .envelope-wax::before,
-.envelope-stage.is-switching .envelope-wax::after,
 .envelope-stage.is-playing .envelope-wax::before,
 .envelope-stage.is-playing .envelope-wax::after{
   animation:none;
@@ -95,7 +90,7 @@
 
 @keyframes waxPulse{
   0%,100%{transform:translate(-50%,-50%) scale(1)}
-  50%{transform:translate(-50%,-50%) scale(1.065)}
+  50%{transform:translate(-50%,-50%) scale(1.06)}
 }
 
 @keyframes waxRing{
