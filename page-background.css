@@ -12,11 +12,16 @@
   font-display:swap;
 }
 
-/* Use the uploaded font on the verse and the decorative/red Arabic headings only. */
+/* Use the uploaded font on all decorative Arabic headings/details. */
 .verse-card p,
 .copy-wrap h2,
 .event-intro,
-.event-block strong{
+.event-block strong,
+.event-block b,
+.time-row b,
+.venue-block strong,
+.rsvp-content h2,
+.dua{
   font-family:'ArefRuqaaLocal', serif;
 }
 
