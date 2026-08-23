@@ -27,6 +27,11 @@ envelopeStyles.rel = 'stylesheet';
 envelopeStyles.href = 'envelope-opening.css';
 document.head.appendChild(envelopeStyles);
 
+const countdownCalendarStyles = document.createElement('link');
+countdownCalendarStyles.rel = 'stylesheet';
+countdownCalendarStyles.href = 'countdown-calendar.css';
+document.head.appendChild(countdownCalendarStyles);
+
 const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
 weddingAudio.loop = true;
 weddingAudio.preload = 'auto';
@@ -82,6 +87,124 @@ if (eventSection) {
     leaf.alt = '';
     leaf.setAttribute('aria-hidden', 'true');
     eventSection.prepend(leaf);
+  });
+}
+
+const arabicDigits = '٠١٢٣٤٥٦٧٨٩';
+function toArabicDigits(value, minimumLength = 0) {
+  return String(value)
+    .padStart(minimumLength, '0')
+    .replace(/\d/g, (digit) => arabicDigits[Number(digit)]);
+}
+
+if (eventSection) {
+  const calendarDays = [null, null, ...Array.from({ length: 30 }, (_, index) => index + 1)];
+  const calendarMarkup = calendarDays.map((day) => {
+    if (day === null) return '<span class="calendar-day is-empty" aria-hidden="true">0</span>';
+    const eventClass = day === 26 ? ' is-event' : '';
+    const eventLabel = day === 26 ? ' aria-label="موعد حفل الزفاف، ٢٦ سبتمبر"' : '';
+    return `<span class="calendar-day${eventClass}"${eventLabel}>${toArabicDigits(day)}</span>`;
+  }).join('');
+
+  const dateTools = document.createElement('section');
+  dateTools.className = 'date-tools panel paper-panel';
+  dateTools.innerHTML = `
+    <div class="date-tools-inner reveal">
+      <p class="date-tools-kicker" id="countdownTitle">باقي على يومنا</p>
+
+      <div class="countdown" id="weddingCountdown" aria-label="العد التنازلي لموعد حفل الزفاف">
+        <div class="countdown-unit">
+          <span class="countdown-number" id="countdownDays">٠٠</span>
+          <span class="countdown-label">يوم</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="countdownHours">٠٠</span>
+          <span class="countdown-label">ساعة</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="countdownMinutes">٠٠</span>
+          <span class="countdown-label">دقيقة</span>
+        </div>
+        <div class="countdown-unit">
+          <span class="countdown-number" id="countdownSeconds">٠٠</span>
+          <span class="countdown-label">ثانية</span>
+        </div>
+      </div>
+
+      <div class="wedding-calendar" aria-label="تقويم سبتمبر ٢٠٢٦">
+        <div class="calendar-heading">
+          <strong>سبتمبر</strong>
+          <span>2026</span>
+        </div>
+        <div class="calendar-weekdays" aria-hidden="true">
+          <span>الأحد</span><span>الإثنين</span><span>الثلاثاء</span><span>الأربعاء</span><span>الخميس</span><span>الجمعة</span><span>السبت</span>
+        </div>
+        <div class="calendar-days">${calendarMarkup}</div>
+        <p class="calendar-caption">السبت، ٢٦ سبتمبر ٢٠٢٦</p>
+        <button class="add-calendar-button" id="addToCalendar" type="button">أضف الموعد للتقويم</button>
+      </div>
+    </div>
+  `;
+
+  eventSection.insertAdjacentElement('afterend', dateTools);
+
+  const targetTime = new Date('2026-09-26T19:00:00+03:00').getTime();
+  const countdownTitle = dateTools.querySelector('#countdownTitle');
+  const dayNode = dateTools.querySelector('#countdownDays');
+  const hourNode = dateTools.querySelector('#countdownHours');
+  const minuteNode = dateTools.querySelector('#countdownMinutes');
+  const secondNode = dateTools.querySelector('#countdownSeconds');
+  let countdownTimer = null;
+
+  const updateCountdown = () => {
+    const distance = Math.max(0, targetTime - Date.now());
+    const days = Math.floor(distance / 86400000);
+    const hours = Math.floor((distance % 86400000) / 3600000);
+    const minutes = Math.floor((distance % 3600000) / 60000);
+    const seconds = Math.floor((distance % 60000) / 1000);
+
+    if (dayNode) dayNode.textContent = toArabicDigits(days, 2);
+    if (hourNode) hourNode.textContent = toArabicDigits(hours, 2);
+    if (minuteNode) minuteNode.textContent = toArabicDigits(minutes, 2);
+    if (secondNode) secondNode.textContent = toArabicDigits(seconds, 2);
+
+    if (distance === 0) {
+      if (countdownTitle) countdownTitle.textContent = 'اليوم يومنا 🤍';
+      if (countdownTimer) window.clearInterval(countdownTimer);
+    }
+  };
+
+  updateCountdown();
+  countdownTimer = window.setInterval(updateCountdown, 1000);
+
+  dateTools.querySelector('#addToCalendar')?.addEventListener('click', () => {
+    const calendarContent = [
+      'BEGIN:VCALENDAR',
+      'VERSION:2.0',
+      'PRODID:-//LaithAndAnwar//Wedding Invitation//AR',
+      'CALSCALE:GREGORIAN',
+      'METHOD:PUBLISH',
+      'BEGIN:VEVENT',
+      'UID:laith-anwar-20260926@wedding-invitation',
+      'DTSTAMP:20260823T000000Z',
+      'DTSTART:20260926T160000Z',
+      'DTEND:20260926T180000Z',
+      'SUMMARY:حفل زفاف ليث وأنوار',
+      'LOCATION:صالة الشرق للاحتفالات، القاعة الملوكية - إربد',
+      'DESCRIPTION:نتشرف بحضوركم ومشاركتنا فرحتنا.',
+      'END:VEVENT',
+      'END:VCALENDAR'
+    ].join('\r\n');
+
+    const blob = new Blob([calendarContent], { type: 'text/calendar;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = 'Laith-Anwar-Wedding.ics';
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+    window.setTimeout(() => URL.revokeObjectURL(url), 1000);
   });
 }
 
