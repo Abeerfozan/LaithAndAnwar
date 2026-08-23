@@ -1,0 +1,192 @@
+/* Keep the entire invitation in a phone-sized canvas on every screen. */
+html{
+  background:#e7e5df;
+}
+
+body{
+  width:100%;
+  max-width:430px;
+  margin:0 auto;
+  min-height:100%;
+  position:relative;
+  background:var(--cream);
+  box-shadow:0 0 36px rgba(24,31,27,.16);
+}
+
+.invitation,
+.panel{
+  width:100%;
+  max-width:430px;
+}
+
+.invitation{
+  margin:0 auto;
+}
+
+.cover,
+.film-grain,
+.floating-leaves{
+  left:50%;
+  right:auto;
+  width:min(100vw,430px);
+  transform:translateX(-50%);
+}
+
+.cover-card{
+  width:84%;
+  min-height:68svh;
+}
+
+.cover-arch{
+  width:74%;
+}
+
+.cover-branch{
+  width:55%;
+}
+
+.cover-branch-a{right:-90px}
+.cover-branch-b{left:-96px}
+
+.hero::before{
+  width:116%;
+  height:75svh;
+}
+
+.hero-arch{
+  width:68%;
+  height:64svh;
+}
+
+.botanical{
+  width:58%;
+}
+
+.botanical-top{right:-90px}
+.botanical-bottom{left:-95px}
+
+.name{
+  font-size:clamp(96px,30vw,132px);
+}
+
+.name-and{
+  font-size:34px;
+}
+
+.hero-rule{
+  bottom:9%;
+}
+
+.verse-section{
+  min-height:54svh;
+  padding:75px 20px;
+}
+
+.verse-section::before{
+  inset:14px;
+}
+
+.verse-card{
+  gap:7px;
+}
+
+.verse-card p{
+  font-size:27px;
+}
+
+.verse-mark{
+  font-size:28px;
+}
+
+.invitation-copy{
+  min-height:72svh;
+  padding:95px 18px;
+}
+
+.copy-wrap{
+  width:100%;
+}
+
+.copy-wrap h2{
+  font-size:33px;
+}
+
+.copy-wrap p{
+  font-size:17px;
+  margin:3px 0;
+}
+
+.copy-flower{
+  width:53%;
+}
+
+.copy-flower-right{right:-95px}
+.copy-flower-left{left:-105px}
+
+.event-section{
+  min-height:92svh;
+  padding:78px 14px;
+}
+
+.event-content{
+  width:100%;
+  padding:45px 15px;
+}
+
+.event-intro{font-size:31px}
+.event-block strong{font-size:25px}
+.event-block b{font-size:34px}
+.event-block span{font-size:14px}
+
+.time-row{
+  gap:14px;
+}
+
+.time-row>div{
+  min-width:0;
+  flex:1;
+}
+
+.time-row span{font-size:12px}
+.time-row b{font-size:20px}
+.venue-block strong{font-size:26px}
+.venue-block span{font-size:16px}
+
+.rsvp-section{
+  min-height:66svh;
+  padding:80px 18px;
+}
+
+.rsvp-content{
+  padding:52px 12px;
+}
+
+.rsvp-content h2{font-size:42px}
+.rsvp-content p{font-size:18px}
+.rsvp-content small{
+  font-size:10px;
+  line-height:1.6;
+}
+
+.closing{
+  min-height:72svh;
+  padding:90px 18px;
+}
+
+.closing-line{font-size:15px}
+.dua{font-size:30px}
+
+.toast{
+  max-width:calc(min(100vw,430px) - 28px);
+  white-space:normal;
+  text-align:center;
+  width:max-content;
+}
+
+@media(max-width:430px){
+  html{background:var(--cream)}
+  body{
+    max-width:none;
+    box-shadow:none;
+  }
+}
