@@ -27,6 +27,11 @@ pageBackgroundStyles.rel = 'stylesheet';
 pageBackgroundStyles.href = 'page-background.css';
 document.head.appendChild(pageBackgroundStyles);
 
+const envelopeStyles = document.createElement('link');
+envelopeStyles.rel = 'stylesheet';
+envelopeStyles.href = 'envelope-opening.css';
+document.head.appendChild(envelopeStyles);
+
 const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
 weddingAudio.loop = true;
 weddingAudio.preload = 'auto';
@@ -123,26 +128,65 @@ if (cover) {
   });
 
   cover.prepend(swanScene);
+
+  cover.classList.add('has-envelope');
+
+  const envelopeStage = document.createElement('div');
+  envelopeStage.className = 'envelope-stage';
+  envelopeStage.innerHTML = `
+    <div class="envelope-stage__scene" aria-hidden="true">
+      <img class="envelope-stage__base" src="assets/images/envelope.png" alt="" />
+      <img class="envelope-stage__flap" src="assets/images/envelope.png" alt="" />
+    </div>
+    <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
+      <img src="assets/images/wax.png" alt="" />
+    </button>
+  `;
+
+  const waxButton = envelopeStage.querySelector('.envelope-wax');
+  let envelopeOpening = false;
+
+  waxButton?.addEventListener('click', async () => {
+    if (envelopeOpening) return;
+    envelopeOpening = true;
+
+    /* Start audio on the real user gesture so mobile browsers allow playback. */
+    try {
+      await weddingAudio.play();
+    } catch (_) {}
+    syncRecordState();
+
+    envelopeStage.classList.add('is-opening');
+
+    window.setTimeout(() => {
+      envelopeStage.classList.add('is-done');
+      openInvitation({ skipAudio: true });
+    }, 1220);
+  });
+
+  cover.appendChild(envelopeStage);
 }
 
-async function openInvitation() {
+async function openInvitation({ skipAudio = false } = {}) {
   if (cover.classList.contains('is-open')) return;
   cover.classList.add('is-open');
   invitation.classList.add('visible');
   invitation.setAttribute('aria-hidden', 'false');
   document.body.classList.remove('locked');
 
-  try {
-    await weddingAudio.play();
-  } catch (_) {}
-  syncRecordState();
+  if (!skipAudio) {
+    try {
+      await weddingAudio.play();
+    } catch (_) {}
+    syncRecordState();
+  }
 
   window.setTimeout(() => {
     document.querySelector('.hero .reveal')?.classList.add('in-view');
   }, 260);
 }
 
-openButton.addEventListener('click', openInvitation);
+openButton?.addEventListener('click', openInvitation);
 
 const revealObserver = new IntersectionObserver((entries) => {
   entries.forEach((entry) => {
@@ -160,7 +204,7 @@ document.querySelectorAll('.reveal').forEach((element) => {
 });
 
 let toastTimer;
-rsvpButton.addEventListener('click', () => {
+rsvpButton?.addEventListener('click', () => {
   window.clearTimeout(toastTimer);
   toast.classList.add('show');
   toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3000);
