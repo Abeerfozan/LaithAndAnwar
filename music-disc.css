@@ -1,7 +1,7 @@
 .record-disc{
   position:absolute;
-  top:-28px;
-  left:-76px;
+  top:-95px;
+  left:-95px;
   z-index:12;
   width:190px;
   aspect-ratio:1;
@@ -53,8 +53,8 @@
 @media(max-width:380px){
   .record-disc{
     width:172px;
-    left:-68px;
-    top:-22px;
+    left:-86px;
+    top:-86px;
   }
 }
 
