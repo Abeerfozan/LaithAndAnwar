@@ -128,7 +128,6 @@ if (cover) {
   });
 
   cover.prepend(swanScene);
-
   cover.classList.add('has-envelope');
 
   const envelopeStage = document.createElement('div');
@@ -136,7 +135,10 @@ if (cover) {
   envelopeStage.innerHTML = `
     <div class="envelope-stage__scene" aria-hidden="true">
       <img class="envelope-stage__base" src="assets/images/envelope.png" alt="" />
-      <img class="envelope-stage__flap" src="assets/images/envelope.png" alt="" />
+      <div class="envelope-stage__flap">
+        <img class="envelope-stage__flap-front" src="assets/images/envelope.png" alt="" />
+        <span class="envelope-stage__flap-back"></span>
+      </div>
     </div>
     <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
       <img src="assets/images/wax.png" alt="" />
@@ -156,12 +158,19 @@ if (cover) {
     } catch (_) {}
     syncRecordState();
 
+    /* Phase 1: remove the seal and open ONLY the upper flap. */
     envelopeStage.classList.add('is-opening');
 
+    /* Phase 2 starts only after the flap has reached its fully-open position. */
     window.setTimeout(() => {
-      envelopeStage.classList.add('is-done');
+      envelopeStage.classList.add('envelope-stage--enter');
+    }, 1080);
+
+    /* Phase 3: enter the invitation after the envelope opening is clearly seen. */
+    window.setTimeout(() => {
       openInvitation({ skipAudio: true });
-    }, 1220);
+      envelopeStage.classList.add('is-done');
+    }, 1600);
   });
 
   cover.appendChild(envelopeStage);
