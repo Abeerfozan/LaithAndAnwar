@@ -3,6 +3,23 @@
   --page-paper-image:url('assets/images/pege_background.png');
 }
 
+/* Local Aref Ruqaa font uploaded with the invitation. */
+@font-face{
+  font-family:'ArefRuqaaLocal';
+  src:url('fonts/ArefRuqaa.ttf') format('truetype');
+  font-style:normal;
+  font-weight:400 700;
+  font-display:swap;
+}
+
+/* Use the uploaded font on the verse and the decorative/red Arabic headings only. */
+.verse-card p,
+.copy-wrap h2,
+.event-intro,
+.event-block strong{
+  font-family:'ArefRuqaaLocal', serif;
+}
+
 /* Keep the dark/green sections unchanged. */
 .invitation,
 .hero,
