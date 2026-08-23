@@ -5,6 +5,27 @@ const rsvpButton = document.getElementById('rsvpButton');
 const toast = document.getElementById('toast');
 const leafLayer = document.getElementById('floatingLeaves');
 
+const motionStyles = document.createElement('link');
+motionStyles.rel = 'stylesheet';
+motionStyles.href = 'swan-motion.css';
+document.head.appendChild(motionStyles);
+
+if (cover) {
+  const swanScene = document.createElement('div');
+  swanScene.className = 'swan-scene';
+  swanScene.setAttribute('aria-hidden', 'true');
+  swanScene.innerHTML = `
+    <div class="swan-scene__stage">
+      <img class="swan-scene__base" src="assets/images/swans.png" alt="" />
+      <div class="swan-scene__swans"></div>
+    </div>
+    <div class="swan-scene__water"></div>
+    <div class="swan-scene__sun"></div>
+    <div class="swan-scene__shade"></div>
+  `;
+  cover.prepend(swanScene);
+}
+
 function openInvitation() {
   if (cover.classList.contains('is-open')) return;
   cover.classList.add('is-open');
