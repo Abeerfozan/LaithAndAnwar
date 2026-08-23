@@ -16,13 +16,37 @@ if (cover) {
   swanScene.setAttribute('aria-hidden', 'true');
   swanScene.innerHTML = `
     <div class="swan-scene__stage">
-      <img class="swan-scene__base" src="assets/images/swans.png" alt="" />
-      <div class="swan-scene__swans"></div>
+      <img class="swan-scene__poster" src="assets/images/swans.png" alt="" />
+      <video
+        class="swan-scene__video"
+        autoplay
+        muted
+        loop
+        playsinline
+        preload="auto"
+        poster="assets/images/swans.png"
+      >
+        <source src="assets/video/swans.mp4" type="video/mp4" />
+      </video>
     </div>
-    <div class="swan-scene__water"></div>
-    <div class="swan-scene__sun"></div>
     <div class="swan-scene__shade"></div>
   `;
+
+  const video = swanScene.querySelector('.swan-scene__video');
+  const poster = swanScene.querySelector('.swan-scene__poster');
+
+  const showVideo = () => {
+    swanScene.classList.add('has-video');
+    video?.play().catch(() => {});
+  };
+
+  video?.addEventListener('loadeddata', showVideo, { once: true });
+  video?.addEventListener('canplay', showVideo, { once: true });
+  video?.addEventListener('error', () => {
+    swanScene.classList.remove('has-video');
+    poster?.removeAttribute('hidden');
+  });
+
   cover.prepend(swanScene);
 }
 
