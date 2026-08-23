@@ -1,0 +1,66 @@
+.event-section{
+  isolation:isolate;
+}
+
+.event-leaf{
+  position:absolute;
+  z-index:1;
+  width:145px;
+  max-width:42%;
+  height:auto;
+  pointer-events:none;
+  user-select:none;
+  opacity:.9;
+  filter:drop-shadow(0 6px 12px rgba(28,45,32,.12));
+  transform-origin:center;
+  animation:eventLeafFloat 7.5s ease-in-out infinite alternate;
+}
+
+.event-leaf--top-right{
+  top:-32px;
+  right:-58px;
+  transform:rotate(8deg);
+}
+
+.event-leaf--mid-left{
+  top:30%;
+  left:-72px;
+  transform:rotate(150deg) scale(.92);
+  animation-delay:-1.8s;
+}
+
+.event-leaf--lower-right{
+  top:61%;
+  right:-78px;
+  transform:rotate(-24deg) scale(.96);
+  animation-delay:-3.1s;
+}
+
+.event-leaf--bottom-left{
+  bottom:-52px;
+  left:-62px;
+  transform:rotate(192deg) scale(1.04);
+  animation-delay:-4.3s;
+}
+
+.event-content{
+  position:relative;
+  z-index:3;
+}
+
+@keyframes eventLeafFloat{
+  0%{margin-top:0}
+  100%{margin-top:8px}
+}
+
+@media(max-width:430px){
+  .event-leaf{width:132px;max-width:40%;opacity:.92}
+  .event-leaf--top-right{right:-54px;top:-28px}
+  .event-leaf--mid-left{left:-68px}
+  .event-leaf--lower-right{right:-72px}
+  .event-leaf--bottom-left{left:-58px;bottom:-48px}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .event-leaf{animation:none}
+}
