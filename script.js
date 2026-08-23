@@ -91,52 +91,63 @@ if (cover) {
   const envelopeStage = document.createElement('div');
   envelopeStage.className = 'envelope-stage';
   envelopeStage.innerHTML = `
-    <div class="envelope-stage__scene" aria-hidden="true">
-      <img class="envelope-stage__base" src="assets/images/envelope.png" alt="" />
-
-      <div class="envelope-stage__inside"></div>
-      <div class="envelope-stage__flap-shadow"></div>
-
-      <div class="envelope-stage__flap">
-        <img class="envelope-stage__flap-front" src="assets/images/envelope.png" alt="" />
-        <div class="envelope-stage__flap-back"></div>
-      </div>
-    </div>
+    <video
+      class="envelope-video"
+      muted
+      playsinline
+      preload="auto"
+      aria-hidden="true"
+    >
+      <source src="assets/video/envelope.mp4" type="video/mp4" />
+    </video>
 
     <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
       <img src="assets/images/wax.png" alt="" />
     </button>
   `;
 
+  const envelopeVideo = envelopeStage.querySelector('.envelope-video');
   const waxButton = envelopeStage.querySelector('.envelope-wax');
-  const flap = envelopeStage.querySelector('.envelope-stage__flap');
-  let envelopeOpening = false;
-  let envelopeFinished = false;
+  let envelopeStarted = false;
 
-  const enterInvitation = () => {
-    if (envelopeFinished) return;
-    envelopeFinished = true;
-    envelopeStage.classList.add('is-entering');
-
-    window.setTimeout(() => {
-      openInvitation({ skipAudio: true });
-      envelopeStage.classList.add('is-done');
-    }, 520);
+  const keepVideoOnFirstFrame = () => {
+    if (!envelopeVideo || envelopeStarted) return;
+    try {
+      envelopeVideo.pause();
+      envelopeVideo.currentTime = 0;
+    } catch (_) {}
   };
 
+  envelopeVideo?.addEventListener('loadedmetadata', keepVideoOnFirstFrame, { once: true });
+  envelopeVideo?.addEventListener('loadeddata', keepVideoOnFirstFrame, { once: true });
+
+  const finishEnvelopeVideo = () => {
+    openInvitation({ skipAudio: true });
+  };
+
+  envelopeVideo?.addEventListener('ended', finishEnvelopeVideo, { once: true });
+
   waxButton?.addEventListener('click', async () => {
-    if (envelopeOpening) return;
-    envelopeOpening = true;
+    if (envelopeStarted) return;
+    envelopeStarted = true;
+    envelopeStage.classList.add('is-playing');
 
     try {
       await weddingAudio.play();
     } catch (_) {}
     syncRecordState();
 
-    envelopeStage.classList.add('is-opening');
+    if (!envelopeVideo) {
+      finishEnvelopeVideo();
+      return;
+    }
 
-    flap?.addEventListener('animationend', enterInvitation, { once: true });
-    window.setTimeout(enterInvitation, 1900);
+    try {
+      envelopeVideo.currentTime = 0;
+      await envelopeVideo.play();
+    } catch (_) {
+      finishEnvelopeVideo();
+    }
   });
 
   cover.appendChild(envelopeStage);
