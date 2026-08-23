@@ -75,7 +75,7 @@
 .envelope-wax{
   position:absolute;
   left:50%;
-  top:61.5%;
+  top:66%;
   z-index:7;
   width:clamp(86px,25vw,116px);
   aspect-ratio:1;
@@ -187,7 +187,7 @@
 @media(max-width:430px){
   /* Stronger zoom on tall phones. */
   .envelope-stage__scene{inset:-22%}
-  .envelope-wax{top:61.5%;width:104px}
+  .envelope-wax{top:66%;width:104px}
 }
 
 @media(prefers-reduced-motion:reduce){
