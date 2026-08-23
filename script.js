@@ -5,6 +5,7 @@ const rsvpButton = document.getElementById('rsvpButton');
 const toast = document.getElementById('toast');
 const leafLayer = document.getElementById('floatingLeaves');
 const hero = document.querySelector('.hero');
+const eventSection = document.querySelector('.event-section');
 
 const motionStyles = document.createElement('link');
 motionStyles.rel = 'stylesheet';
@@ -15,6 +16,11 @@ const musicStyles = document.createElement('link');
 musicStyles.rel = 'stylesheet';
 musicStyles.href = 'music-disc.css';
 document.head.appendChild(musicStyles);
+
+const eventLeavesStyles = document.createElement('link');
+eventLeavesStyles.rel = 'stylesheet';
+eventLeavesStyles.href = 'event-leaves.css';
+document.head.appendChild(eventLeavesStyles);
 
 const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
 weddingAudio.loop = true;
@@ -55,6 +61,24 @@ if (hero) {
 weddingAudio.addEventListener('play', syncRecordState);
 weddingAudio.addEventListener('pause', syncRecordState);
 weddingAudio.addEventListener('ended', syncRecordState);
+
+if (eventSection) {
+  const leafPositions = [
+    'event-leaf--top-right',
+    'event-leaf--mid-left',
+    'event-leaf--lower-right',
+    'event-leaf--bottom-left'
+  ];
+
+  leafPositions.forEach((positionClass) => {
+    const leaf = document.createElement('img');
+    leaf.className = `event-leaf ${positionClass}`;
+    leaf.src = 'assets/images/leaves.png';
+    leaf.alt = '';
+    leaf.setAttribute('aria-hidden', 'true');
+    eventSection.prepend(leaf);
+  });
+}
 
 if (cover) {
   const swanScene = document.createElement('div');
