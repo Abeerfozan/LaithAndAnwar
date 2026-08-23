@@ -151,20 +151,14 @@ if (cover) {
     try {
       envelopeVideo.pause();
       envelopeVideo.currentTime = 0;
-    } catch (_) {}
 
-    /* Hide the still almost instantly while the already-loaded video sits beneath it. */
-    envelopeStage.classList.add('is-switching');
-
-    window.setTimeout(async () => {
-      try {
-        await envelopeVideo.play();
-        envelopeStage.classList.remove('is-switching');
-        envelopeStage.classList.add('is-playing');
-      } catch (_) {
-        finishEnvelopeVideo();
-      }
-    }, 55);
+      /* Start the video and remove the still in the exact same interaction frame. */
+      const playPromise = envelopeVideo.play();
+      envelopeStage.classList.add('is-playing');
+      await playPromise;
+    } catch (_) {
+      finishEnvelopeVideo();
+    }
   });
 
   cover.appendChild(envelopeStage);
