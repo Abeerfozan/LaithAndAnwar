@@ -1,0 +1,155 @@
+.cover{
+  background:#27362d;
+}
+
+.swan-scene{
+  position:absolute;
+  inset:0;
+  z-index:0;
+  overflow:hidden;
+  pointer-events:none;
+  background:#27362d;
+}
+
+.swan-scene__stage{
+  position:absolute;
+  inset:-3.5%;
+  transform-origin:52% 62%;
+  animation:swanCamera 16s ease-in-out infinite alternate;
+  will-change:transform;
+}
+
+.swan-scene__base,
+.swan-scene__swans{
+  position:absolute;
+  inset:0;
+  width:100%;
+  height:100%;
+}
+
+.swan-scene__base{
+  object-fit:cover;
+  object-position:center center;
+  filter:saturate(.94) contrast(1.03) brightness(.96);
+}
+
+.swan-scene__swans{
+  background:url('assets/images/swans.png') center center / cover no-repeat;
+  -webkit-mask-image:radial-gradient(ellipse 38% 18% at 65% 79%,#000 0 54%,rgba(0,0,0,.72) 66%,transparent 82%);
+  mask-image:radial-gradient(ellipse 38% 18% at 65% 79%,#000 0 54%,rgba(0,0,0,.72) 66%,transparent 82%);
+  transform-origin:66% 80%;
+  animation:swanBob 5.8s ease-in-out infinite;
+  will-change:transform;
+}
+
+.swan-scene__water{
+  position:absolute;
+  left:-12%;
+  right:-12%;
+  bottom:-5%;
+  height:43%;
+  opacity:.44;
+  mix-blend-mode:screen;
+  background:
+    repeating-radial-gradient(ellipse at 58% 25%,rgba(255,255,255,.20) 0 1px,transparent 2px 17px),
+    repeating-linear-gradient(96deg,transparent 0 22px,rgba(218,232,221,.10) 23px 24px,transparent 25px 47px);
+  filter:blur(.35px);
+  transform:skewX(-3deg);
+  animation:waterFlow 8s linear infinite;
+  will-change:transform,opacity;
+}
+
+.swan-scene__sun{
+  position:absolute;
+  left:-12%;
+  top:18%;
+  width:80%;
+  height:68%;
+  opacity:.36;
+  mix-blend-mode:screen;
+  background:
+    linear-gradient(118deg,transparent 0 35%,rgba(255,248,208,.34) 42%,transparent 50%),
+    linear-gradient(124deg,transparent 0 43%,rgba(255,250,222,.24) 48%,transparent 54%);
+  filter:blur(8px);
+  transform-origin:12% 18%;
+  animation:sunBreath 7s ease-in-out infinite alternate;
+  will-change:transform,opacity;
+}
+
+.swan-scene__shade{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(180deg,rgba(20,31,25,.18) 0%,rgba(20,31,25,.02) 38%,rgba(20,31,25,.16) 100%),
+    radial-gradient(circle at 50% 40%,transparent 0 44%,rgba(11,20,16,.16) 100%);
+}
+
+.cover::before{
+  z-index:1;
+  opacity:.30;
+}
+
+.cover-glow{
+  z-index:1;
+  opacity:.55;
+}
+
+.cover-branch{
+  z-index:2;
+  opacity:.62;
+}
+
+.cover-card{
+  z-index:3;
+}
+
+.cover-card::before{
+  background:linear-gradient(180deg,rgba(32,49,39,.12),rgba(24,39,31,.20));
+  border-color:rgba(255,253,248,.34);
+  backdrop-filter:blur(1.5px);
+}
+
+@keyframes swanCamera{
+  0%{transform:scale(1.015) translate3d(-.3%,.2%,0)}
+  45%{transform:scale(1.045) translate3d(.5%,-.7%,0)}
+  100%{transform:scale(1.075) translate3d(-.35%,-1.15%,0)}
+}
+
+@keyframes swanBob{
+  0%,100%{transform:translate3d(0,0,0) rotate(0deg)}
+  45%{transform:translate3d(.12%,-.22%,0) rotate(-.08deg)}
+  72%{transform:translate3d(-.08%,.13%,0) rotate(.05deg)}
+}
+
+@keyframes waterFlow{
+  0%{transform:translate3d(-1.5%,0,0) skewX(-3deg);opacity:.34}
+  50%{opacity:.48}
+  100%{transform:translate3d(2.5%,1.1%,0) skewX(2deg);opacity:.36}
+}
+
+@keyframes sunBreath{
+  0%{transform:rotate(-1.2deg) scale(.98);opacity:.24}
+  55%{opacity:.40}
+  100%{transform:rotate(1.2deg) scale(1.035);opacity:.32}
+}
+
+@media(max-width:700px){
+  .swan-scene__stage{inset:-2.5%;}
+  .swan-scene__base{object-position:50% 50%;}
+  .swan-scene__swans{
+    background-position:50% 50%;
+    -webkit-mask-image:radial-gradient(ellipse 47% 17% at 65% 79%,#000 0 55%,rgba(0,0,0,.70) 68%,transparent 84%);
+    mask-image:radial-gradient(ellipse 47% 17% at 65% 79%,#000 0 55%,rgba(0,0,0,.70) 68%,transparent 84%);
+  }
+  .swan-scene__water{height:44%;opacity:.36;}
+  .swan-scene__sun{left:-20%;width:95%;opacity:.30;}
+}
+
+@media(prefers-reduced-motion:reduce){
+  .swan-scene__stage,
+  .swan-scene__swans,
+  .swan-scene__water,
+  .swan-scene__sun{
+    animation:none;
+  }
+}
