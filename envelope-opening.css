@@ -6,14 +6,15 @@
   display:grid;
   place-items:center;
   overflow:hidden;
-  perspective:1200px;
+  perspective:1500px;
   background:#f3efe6;
-  transition:opacity .45s ease,visibility .45s ease;
+  transition:opacity .42s ease,visibility .42s ease;
 }
 
+/* Zoom the artwork itself so no empty strip can appear around the phone canvas. */
 .envelope-stage__scene{
   position:absolute;
-  inset:0;
+  inset:-13%;
   transform-style:preserve-3d;
   will-change:transform,opacity;
 }
@@ -25,31 +26,37 @@
   width:100%;
   height:100%;
   object-fit:cover;
-  object-position:center;
+  object-position:center center;
   user-select:none;
   -webkit-user-drag:none;
 }
 
+/* The body of the envelope never moves while the flap is opening. */
 .envelope-stage__base{
   z-index:1;
-  transform:scale(1.01);
   filter:saturate(.98) contrast(1.01);
 }
 
+/*
+  A second perfectly aligned copy of the same artwork is clipped down to only
+  the upper envelope flap. Its hinge sits on the fold line, so only that flap
+  lifts upward while the rest of the envelope stays still.
+*/
 .envelope-stage__flap{
-  z-index:3;
-  clip-path:polygon(0 0,100% 0,100% 55%,50% 73%,0 55%);
-  transform-origin:50% 0%;
+  z-index:4;
+  clip-path:polygon(0 0,100% 0,100% 52%,50% 70%,0 52%);
+  transform-origin:50% 57%;
   backface-visibility:hidden;
+  transform-style:preserve-3d;
   will-change:transform,filter;
-  filter:drop-shadow(0 12px 12px rgba(42,33,24,.14));
+  filter:drop-shadow(0 10px 12px rgba(42,33,24,.14));
 }
 
 .envelope-wax{
   position:absolute;
   left:50%;
   top:51%;
-  z-index:6;
+  z-index:7;
   width:clamp(86px,25vw,116px);
   aspect-ratio:1;
   padding:0;
@@ -83,28 +90,23 @@
   animation:waxRing 1.55s ease-out infinite;
 }
 
-.envelope-wax::after{
-  animation-delay:.55s;
-}
-
-.envelope-stage.is-opening{
-  pointer-events:none;
-}
+.envelope-wax::after{animation-delay:.55s}
+.envelope-stage.is-opening{pointer-events:none}
 
 .envelope-stage.is-opening .envelope-wax{
-  animation:waxPress .26s ease forwards;
+  animation:waxPress .24s ease forwards;
 }
 
-.envelope-stage.is-opening .envelope-wax img{
-  animation:none;
-}
+.envelope-stage.is-opening .envelope-wax img{animation:none}
 
+/* Open ONLY the top flap. */
 .envelope-stage.is-opening .envelope-stage__flap{
-  animation:envelopeFlapOpen .92s cubic-bezier(.2,.78,.25,1) forwards;
+  animation:envelopeFlapOpen 1.05s cubic-bezier(.18,.72,.2,1) forwards;
 }
 
-.envelope-stage.is-opening .envelope-stage__scene{
-  animation:envelopeMoveAway 1.22s .28s cubic-bezier(.32,.72,.2,1) forwards;
+/* After the flap is fully open, fade the whole envelope and enter the invite. */
+.envelope-stage.is-opening.envelope-stage--enter{
+  animation:envelopeEnterInvite .58s cubic-bezier(.35,.68,.25,1) forwards;
 }
 
 .envelope-stage.is-done{
@@ -126,19 +128,31 @@
 @keyframes waxPress{
   0%{transform:translate(-50%,-50%) scale(1)}
   55%{transform:translate(-50%,-50%) scale(.88)}
-  100%{transform:translate(-50%,-50%) scale(.18);opacity:0}
+  100%{transform:translate(-50%,-50%) scale(.12);opacity:0}
 }
 
+/* Hinge on the fold: the top flap rises back/up like a real envelope lid. */
 @keyframes envelopeFlapOpen{
-  0%{transform:rotateX(0deg) translateZ(0)}
-  58%{transform:rotateX(-118deg) translateZ(10px)}
-  100%{transform:rotateX(-178deg) translateZ(2px);filter:drop-shadow(0 -8px 12px rgba(42,33,24,.10))}
+  0%{
+    transform:perspective(1500px) rotateX(0deg) translateY(0);
+    filter:drop-shadow(0 10px 12px rgba(42,33,24,.14));
+  }
+  42%{
+    transform:perspective(1500px) rotateX(72deg) translateY(-1.5%);
+    filter:drop-shadow(0 3px 8px rgba(42,33,24,.12));
+  }
+  72%{
+    transform:perspective(1500px) rotateX(132deg) translateY(-4%);
+  }
+  100%{
+    transform:perspective(1500px) rotateX(162deg) translateY(-7%);
+    filter:drop-shadow(0 -9px 14px rgba(42,33,24,.10));
+  }
 }
 
-@keyframes envelopeMoveAway{
-  0%{transform:translate3d(0,0,0) scale(1);opacity:1}
-  42%{transform:translate3d(0,2.2%,0) scale(.985);opacity:1}
-  100%{transform:translate3d(0,9%,0) scale(1.08);opacity:0}
+@keyframes envelopeEnterInvite{
+  0%{opacity:1;transform:scale(1)}
+  100%{opacity:0;transform:scale(1.055)}
 }
 
 /* Hide the old cover controls while the envelope is the first interaction. */
@@ -151,20 +165,22 @@
 }
 
 @media(max-width:430px){
+  /* More zoom on tall phone screens to guarantee true edge-to-edge coverage. */
+  .envelope-stage__scene{inset:-16%}
   .envelope-wax{top:51%;width:104px}
 }
 
 @media(prefers-reduced-motion:reduce){
   .envelope-wax img,
   .envelope-wax::before,
-  .envelope-wax::after{
-    animation:none;
-  }
+  .envelope-wax::after{animation:none}
+
   .envelope-stage.is-opening .envelope-stage__flap{
     animation:none;
-    transform:rotateX(-175deg);
+    transform:rotateX(162deg) translateY(-7%);
   }
-  .envelope-stage.is-opening .envelope-stage__scene{
+
+  .envelope-stage.is-opening.envelope-stage--enter{
     animation:none;
     opacity:0;
   }
