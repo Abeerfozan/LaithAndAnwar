@@ -101,6 +101,13 @@ if (cover) {
       <source src="assets/video/envelope.mp4" type="video/mp4" />
     </video>
 
+    <img
+      class="envelope-still"
+      src="assets/images/envelope.png"
+      alt=""
+      aria-hidden="true"
+    />
+
     <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
       <img src="assets/images/wax.png" alt="" />
     </button>
@@ -130,7 +137,6 @@ if (cover) {
   waxButton?.addEventListener('click', async () => {
     if (envelopeStarted) return;
     envelopeStarted = true;
-    envelopeStage.classList.add('is-playing');
 
     try {
       await weddingAudio.play();
@@ -143,11 +149,22 @@ if (cover) {
     }
 
     try {
+      envelopeVideo.pause();
       envelopeVideo.currentTime = 0;
-      await envelopeVideo.play();
-    } catch (_) {
-      finishEnvelopeVideo();
-    }
+    } catch (_) {}
+
+    /* Hide the still almost instantly while the already-loaded video sits beneath it. */
+    envelopeStage.classList.add('is-switching');
+
+    window.setTimeout(async () => {
+      try {
+        await envelopeVideo.play();
+        envelopeStage.classList.remove('is-switching');
+        envelopeStage.classList.add('is-playing');
+      } catch (_) {
+        finishEnvelopeVideo();
+      }
+    }, 55);
   });
 
   cover.appendChild(envelopeStage);
