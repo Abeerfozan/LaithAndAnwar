@@ -93,15 +93,18 @@ if (cover) {
   envelopeStage.innerHTML = `
     <div class="envelope-stage__scene" aria-hidden="true">
       <img class="envelope-stage__base" src="assets/images/envelope.png" alt="" />
+
+      <div class="envelope-stage__inside"></div>
       <div class="envelope-stage__flap-shadow"></div>
+
       <div class="envelope-stage__flap">
         <img class="envelope-stage__flap-front" src="assets/images/envelope.png" alt="" />
         <div class="envelope-stage__flap-back"></div>
       </div>
     </div>
+
     <button class="envelope-wax" type="button" aria-label="افتح الدعوة">
-      <img class="envelope-wax__half envelope-wax__half--left" src="assets/images/wax.png" alt="" />
-      <img class="envelope-wax__half envelope-wax__half--right" src="assets/images/wax.png" alt="" />
+      <img src="assets/images/wax.png" alt="" />
     </button>
   `;
 
@@ -118,7 +121,7 @@ if (cover) {
     window.setTimeout(() => {
       openInvitation({ skipAudio: true });
       envelopeStage.classList.add('is-done');
-    }, 430);
+    }, 520);
   };
 
   waxButton?.addEventListener('click', async () => {
@@ -132,9 +135,8 @@ if (cover) {
 
     envelopeStage.classList.add('is-opening');
 
-    /* Enter only after the flap has completed its full 3D opening. */
     flap?.addEventListener('animationend', enterInvitation, { once: true });
-    window.setTimeout(enterInvitation, 1750);
+    window.setTimeout(enterInvitation, 1900);
   });
 
   cover.appendChild(envelopeStage);
