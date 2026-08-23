@@ -22,6 +22,11 @@ eventLeavesStyles.rel = 'stylesheet';
 eventLeavesStyles.href = 'event-leaves.css';
 document.head.appendChild(eventLeavesStyles);
 
+const pageBackgroundStyles = document.createElement('link');
+pageBackgroundStyles.rel = 'stylesheet';
+pageBackgroundStyles.href = 'page-background.css';
+document.head.appendChild(pageBackgroundStyles);
+
 const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
 weddingAudio.loop = true;
 weddingAudio.preload = 'auto';
