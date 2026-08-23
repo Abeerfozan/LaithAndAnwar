@@ -1,0 +1,182 @@
+/* Wedding countdown and September 2026 calendar. */
+.date-tools{
+  min-height:100svh;
+  display:grid;
+  place-items:center;
+  padding:96px 20px;
+  color:var(--olive);
+}
+
+.date-tools-inner{
+  position:relative;
+  z-index:2;
+  width:min(390px,100%);
+  text-align:center;
+}
+
+.date-tools-kicker{
+  margin:0 0 30px;
+  font-family:var(--ruqaa);
+  font-size:clamp(32px,8vw,46px);
+  line-height:1.4;
+  color:var(--olive);
+}
+
+.countdown{
+  direction:ltr;
+  display:grid;
+  grid-template-columns:repeat(4,1fr);
+  gap:8px;
+  padding:22px 0;
+  border-top:1px solid rgba(63,76,67,.22);
+  border-bottom:1px solid rgba(63,76,67,.22);
+}
+
+.countdown-unit{
+  position:relative;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  min-width:0;
+}
+
+.countdown-unit:not(:last-child)::after{
+  content:"";
+  position:absolute;
+  right:-4px;
+  top:22%;
+  bottom:22%;
+  width:1px;
+  background:rgba(63,76,67,.14);
+}
+
+.countdown-number{
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:clamp(31px,9vw,46px);
+  line-height:1;
+  font-variant-numeric:tabular-nums;
+  color:var(--olive);
+}
+
+.countdown-label{
+  direction:rtl;
+  margin-top:9px;
+  font-size:12px;
+  color:#737c72;
+}
+
+.wedding-calendar{
+  margin:48px auto 0;
+  width:min(350px,100%);
+}
+
+.calendar-heading{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:12px;
+  padding-bottom:14px;
+  border-bottom:1px solid rgba(63,76,67,.18);
+}
+
+.calendar-heading strong{
+  font-family:var(--ruqaa);
+  font-size:30px;
+  font-weight:400;
+  color:var(--olive);
+}
+
+.calendar-heading span{
+  direction:ltr;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:15px;
+  letter-spacing:.08em;
+  color:var(--sage);
+}
+
+.calendar-weekdays,
+.calendar-days{
+  direction:rtl;
+  display:grid;
+  grid-template-columns:repeat(7,1fr);
+}
+
+.calendar-weekdays{
+  padding:15px 0 8px;
+  color:#7b8278;
+  font-size:10px;
+}
+
+.calendar-weekdays span,
+.calendar-day{
+  display:grid;
+  place-items:center;
+}
+
+.calendar-days{
+  row-gap:4px;
+}
+
+.calendar-day{
+  position:relative;
+  aspect-ratio:1;
+  border-radius:50%;
+  font-family:Georgia,'Times New Roman',serif;
+  font-size:14px;
+  color:var(--olive);
+}
+
+.calendar-day.is-empty{
+  visibility:hidden;
+}
+
+.calendar-day.is-event{
+  background:var(--olive);
+  color:var(--cream);
+  box-shadow:0 8px 22px rgba(63,76,67,.22);
+  transform:scale(1.08);
+}
+
+.calendar-day.is-event::after{
+  content:"";
+  position:absolute;
+  inset:-5px;
+  border:1px solid rgba(63,76,67,.26);
+  border-radius:50%;
+}
+
+.calendar-caption{
+  margin:14px 0 0;
+  font-size:13px;
+  color:#70786e;
+}
+
+.add-calendar-button{
+  margin-top:28px;
+  border:1px solid rgba(63,76,67,.42);
+  background:transparent;
+  color:var(--olive);
+  padding:11px 24px 12px;
+  min-width:190px;
+  font-size:15px;
+  cursor:pointer;
+  transition:transform .25s ease,background .25s ease,color .25s ease,box-shadow .25s ease;
+}
+
+.add-calendar-button:hover,
+.add-calendar-button:focus-visible{
+  background:var(--olive);
+  color:var(--cream);
+  transform:translateY(-2px);
+  box-shadow:0 10px 24px rgba(63,76,67,.14);
+  outline:none;
+}
+
+@media(max-width:380px){
+  .date-tools{padding:82px 15px}
+  .date-tools-kicker{font-size:31px}
+  .countdown-number{font-size:30px}
+  .countdown-label{font-size:11px}
+  .calendar-heading strong{font-size:27px}
+}
