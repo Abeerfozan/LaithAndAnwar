@@ -1,11 +1,13 @@
 const cover = document.getElementById('cover');
 const invitation = document.getElementById('invitation');
 const openButton = document.getElementById('openInvitation');
-const rsvpButton = document.getElementById('rsvpButton');
 const toast = document.getElementById('toast');
 const leafLayer = document.getElementById('floatingLeaves');
 const hero = document.querySelector('.hero');
 const eventSection = document.querySelector('.event-section');
+
+/* Paste the deployed Google Apps Script /exec URL here after deployment. */
+const RSVP_GOOGLE_SCRIPT_URL = '';
 
 const musicStyles = document.createElement('link');
 musicStyles.rel = 'stylesheet';
@@ -31,6 +33,11 @@ const countdownCalendarStyles = document.createElement('link');
 countdownCalendarStyles.rel = 'stylesheet';
 countdownCalendarStyles.href = 'countdown-calendar.css';
 document.head.appendChild(countdownCalendarStyles);
+
+const rsvpFormStyles = document.createElement('link');
+rsvpFormStyles.rel = 'stylesheet';
+rsvpFormStyles.href = 'rsvp-form.css';
+document.head.appendChild(rsvpFormStyles);
 
 const weddingAudio = new Audio('assets/audio/Maha%20Ftouni%20-%20Agmal%20Farha.mp3');
 weddingAudio.loop = true;
@@ -208,6 +215,151 @@ if (eventSection) {
   });
 }
 
+function setupRsvpForm() {
+  const rsvpContent = document.querySelector('.rsvp-content');
+  if (!rsvpContent) return;
+
+  rsvpContent.innerHTML = `
+    <span class="tiny-flourish" aria-hidden="true">❦</span>
+    <h2>حضوركم يُهمّنا</h2>
+    <p class="rsvp-intro">وجودكم معنا يصنع للفرحة معنى أجمل، يسعدنا معرفة قراركم.</p>
+
+    <form class="rsvp-form" id="rsvpForm" novalidate>
+      <div class="rsvp-field">
+        <label class="rsvp-field-label" for="guestName">اسم الضيف</label>
+        <div class="rsvp-name-wrap">
+          <span class="rsvp-name-icon" aria-hidden="true">✦</span>
+          <input
+            class="rsvp-name-input"
+            id="guestName"
+            name="name"
+            type="text"
+            autocomplete="name"
+            maxlength="80"
+            placeholder="اكتب اسمك هنا..."
+            required
+          />
+        </div>
+      </div>
+
+      <fieldset class="rsvp-choice-fieldset">
+        <legend class="rsvp-choice-legend">هل ستشاركونا فرحتنا؟</legend>
+        <div class="rsvp-choice-list">
+          <label class="rsvp-choice">
+            <input type="radio" name="attendance" value="attending" required />
+            <span class="rsvp-choice-surface">
+              <span class="rsvp-choice-icon" aria-hidden="true">♡</span>
+              <span class="rsvp-choice-title">سأحضر بكل سرور</span>
+              <span class="rsvp-choice-subtitle">ننتظركم بمحبة</span>
+            </span>
+          </label>
+
+          <label class="rsvp-choice">
+            <input type="radio" name="attendance" value="not_attending" required />
+            <span class="rsvp-choice-surface">
+              <span class="rsvp-choice-icon" aria-hidden="true">❦</span>
+              <span class="rsvp-choice-title">أعتذر عن الحضور</span>
+              <span class="rsvp-choice-subtitle">محبتكم تصلنا دائمًا</span>
+            </span>
+          </label>
+        </div>
+      </fieldset>
+
+      <button class="rsvp-submit" id="rsvpButton" type="submit">تأكيد الحضور</button>
+      <p class="rsvp-form-status" id="rsvpFormStatus" role="status" aria-live="polite"></p>
+    </form>
+  `;
+
+  const form = rsvpContent.querySelector('#rsvpForm');
+  const submitButton = rsvpContent.querySelector('#rsvpButton');
+  const statusNode = rsvpContent.querySelector('#rsvpFormStatus');
+
+  const setStatus = (message, type = '') => {
+    if (!statusNode) return;
+    statusNode.textContent = message;
+    statusNode.classList.remove('is-success', 'is-error');
+    if (type) statusNode.classList.add(`is-${type}`);
+  };
+
+  form?.querySelectorAll('input[name="attendance"]').forEach((input) => {
+    input.addEventListener('change', () => {
+      if (!submitButton) return;
+      submitButton.textContent = input.value === 'attending' ? 'تأكيد حضوري 🤍' : 'إرسال الاعتذار بلطف';
+      setStatus('');
+    });
+  });
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+
+    const nameInput = form.querySelector('#guestName');
+    const attendanceInput = form.querySelector('input[name="attendance"]:checked');
+    const guestName = nameInput?.value.trim() || '';
+
+    if (!guestName) {
+      nameInput?.focus();
+      setStatus('اكتب اسمك أولًا حتى نقدر نسجّل ردك.', 'error');
+      return;
+    }
+
+    if (!attendanceInput) {
+      setStatus('اختار إذا كنت ستحضر أو تعتذر عن الحضور.', 'error');
+      return;
+    }
+
+    if (!RSVP_GOOGLE_SCRIPT_URL) {
+      setStatus('الفورم جاهز للربط مع Google Sheet — باقي فقط رابط الـWeb App.', 'error');
+      return;
+    }
+
+    const originalButtonText = submitButton?.textContent || 'تأكيد الحضور';
+    if (submitButton) {
+      submitButton.disabled = true;
+      submitButton.textContent = 'جاري تسجيل ردّكم...';
+    }
+    setStatus('');
+
+    const payload = new URLSearchParams({
+      name: guestName,
+      attendance: attendanceInput.value,
+      submittedAt: new Date().toISOString(),
+      source: 'LaithAndAnwar invitation'
+    });
+
+    try {
+      await fetch(RSVP_GOOGLE_SCRIPT_URL, {
+        method: 'POST',
+        mode: 'no-cors',
+        body: payload
+      });
+
+      setStatus(
+        attendanceInput.value === 'attending'
+          ? `تم تسجيل حضورك يا ${guestName}، ننتظرك بكل فرح 🤍`
+          : `تم تسجيل اعتذارك يا ${guestName}، ومحبتك وصلت 🤍`,
+        'success'
+      );
+
+      if (toast) {
+        window.clearTimeout(toast._hideTimer);
+        toast.textContent = 'تم تسجيل ردّكم بنجاح 🤍';
+        toast.classList.add('show');
+        toast._hideTimer = window.setTimeout(() => toast.classList.remove('show'), 3000);
+      }
+
+      form.reset();
+      if (submitButton) submitButton.textContent = 'تأكيد الحضور';
+    } catch (_) {
+      setStatus('صار خلل بسيط أثناء الإرسال. جرّب مرة ثانية.', 'error');
+      if (submitButton) submitButton.textContent = originalButtonText;
+    } finally {
+      if (submitButton) submitButton.disabled = false;
+    }
+  });
+}
+
+setupRsvpForm();
+
 if (cover) {
   cover.classList.add('has-envelope');
 
@@ -321,13 +473,6 @@ const revealObserver = new IntersectionObserver((entries) => {
 
 document.querySelectorAll('.reveal').forEach((element) => {
   revealObserver.observe(element);
-});
-
-let toastTimer;
-rsvpButton?.addEventListener('click', () => {
-  window.clearTimeout(toastTimer);
-  toast.classList.add('show');
-  toastTimer = window.setTimeout(() => toast.classList.remove('show'), 3000);
 });
 
 function createLeaf() {
