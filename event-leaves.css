@@ -53,14 +53,43 @@
   100%{margin-top:8px}
 }
 
+/* Falling decoration across the invitation: use elegant ✦ stars instead of leaf shapes. */
+.floating-leaves .float-leaf{
+  width:auto;
+  height:auto;
+  border-radius:0;
+  background:none;
+  color:rgba(147,152,126,.62);
+  font-size:15px;
+  line-height:1;
+  text-align:center;
+  filter:drop-shadow(0 0 7px rgba(248,246,242,.35));
+  animation-name:starFall;
+  transform-origin:center;
+}
+
+.floating-leaves .float-leaf::before{
+  content:"✦";
+  display:block;
+}
+
+@keyframes starFall{
+  to{
+    transform:translate3d(var(--drift),105vh,0) rotate(300deg) scale(.55);
+    opacity:0;
+  }
+}
+
 @media(max-width:430px){
   .event-leaf{width:132px;max-width:40%;opacity:.92}
   .event-leaf--top-right{right:-54px;top:-28px}
   .event-leaf--mid-left{left:-68px}
   .event-leaf--lower-right{right:-72px}
   .event-leaf--bottom-left{left:-58px;bottom:-48px}
+  .floating-leaves .float-leaf{font-size:13px}
 }
 
 @media(prefers-reduced-motion:reduce){
   .event-leaf{animation:none}
+  .floating-leaves .float-leaf{animation:none}
 }
