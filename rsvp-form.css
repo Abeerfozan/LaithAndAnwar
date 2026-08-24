@@ -241,6 +241,26 @@
   display:none !important;
 }
 
+/* Keep the selected-action button labels clean and simple. */
+.rsvp-form:has(input[value="attending"]:checked) .rsvp-submit:not(:disabled),
+.rsvp-form:has(input[value="not_attending"]:checked) .rsvp-submit:not(:disabled){
+  font-size:0;
+}
+
+.rsvp-form:has(input[value="attending"]:checked) .rsvp-submit:not(:disabled)::after{
+  content:"تأكيد حضوري";
+  position:relative;
+  z-index:1;
+  font-size:17px;
+}
+
+.rsvp-form:has(input[value="not_attending"]:checked) .rsvp-submit:not(:disabled)::after{
+  content:"إرسال الاعتذار";
+  position:relative;
+  z-index:1;
+  font-size:17px;
+}
+
 @media(max-width:430px){
   .rsvp-section{min-height:82svh;padding:78px 15px}
   .rsvp-content{padding:50px 10px 48px}
