@@ -1,0 +1,251 @@
+/* Creative RSVP form — soft, elegant and mobile-first. */
+.rsvp-section{
+  min-height:88svh;
+}
+
+.rsvp-content{
+  width:min(620px,94%);
+  padding:62px 26px 58px;
+}
+
+.rsvp-intro{
+  max-width:430px;
+  margin:0 auto 32px !important;
+}
+
+.rsvp-form{
+  width:min(430px,100%);
+  margin:0 auto;
+  text-align:right;
+}
+
+.rsvp-field{
+  position:relative;
+  margin:0 0 30px;
+}
+
+.rsvp-field-label,
+.rsvp-choice-legend{
+  display:block;
+  margin:0 0 11px;
+  font-size:13px;
+  letter-spacing:.02em;
+  color:rgba(248,246,242,.7);
+}
+
+.rsvp-name-wrap{
+  position:relative;
+  display:flex;
+  align-items:center;
+  gap:10px;
+  padding:0 2px 8px;
+  border-bottom:1px solid rgba(248,246,242,.34);
+  transition:border-color .28s ease,transform .28s ease;
+}
+
+.rsvp-name-wrap::after{
+  content:"";
+  position:absolute;
+  left:0;
+  right:0;
+  bottom:-1px;
+  height:1px;
+  background:linear-gradient(90deg,transparent,#d7d5c2,transparent);
+  transform:scaleX(0);
+  transform-origin:center;
+  transition:transform .3s ease;
+}
+
+.rsvp-name-wrap:focus-within{
+  border-color:transparent;
+  transform:translateY(-1px);
+}
+
+.rsvp-name-wrap:focus-within::after{
+  transform:scaleX(1);
+}
+
+.rsvp-name-icon{
+  flex:0 0 auto;
+  width:27px;
+  height:27px;
+  display:grid;
+  place-items:center;
+  border:1px solid rgba(248,246,242,.22);
+  border-radius:50%;
+  color:#d4d3bf;
+  font-size:12px;
+}
+
+.rsvp-name-input{
+  width:100%;
+  border:0;
+  outline:0;
+  background:transparent;
+  color:#fffdf8;
+  font-family:var(--arabic);
+  font-size:18px;
+  padding:7px 0 4px;
+}
+
+.rsvp-name-input::placeholder{
+  color:rgba(248,246,242,.38);
+}
+
+.rsvp-choice-fieldset{
+  margin:0 0 31px;
+  padding:0;
+  border:0;
+}
+
+.rsvp-choice-list{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
+}
+
+.rsvp-choice{
+  position:relative;
+  cursor:pointer;
+  user-select:none;
+}
+
+.rsvp-choice input{
+  position:absolute;
+  opacity:0;
+  pointer-events:none;
+}
+
+.rsvp-choice-surface{
+  position:relative;
+  min-height:92px;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  gap:5px;
+  padding:16px 10px;
+  border:1px solid rgba(248,246,242,.17);
+  border-radius:48% 48% 16px 16px / 28% 28% 16px 16px;
+  background:rgba(255,255,255,.025);
+  overflow:hidden;
+  transition:transform .28s ease,border-color .28s ease,background .28s ease,box-shadow .28s ease;
+}
+
+.rsvp-choice-surface::before{
+  content:"";
+  position:absolute;
+  width:96px;
+  height:96px;
+  border:1px solid rgba(248,246,242,.08);
+  border-radius:50%;
+  top:-58px;
+  right:-34px;
+  transition:transform .35s ease,opacity .35s ease;
+}
+
+.rsvp-choice:hover .rsvp-choice-surface{
+  transform:translateY(-2px);
+  border-color:rgba(248,246,242,.32);
+}
+
+.rsvp-choice input:checked + .rsvp-choice-surface{
+  background:rgba(248,246,242,.11);
+  border-color:rgba(248,246,242,.62);
+  box-shadow:0 12px 34px rgba(8,16,11,.16),inset 0 0 0 1px rgba(255,255,255,.04);
+  transform:translateY(-2px);
+}
+
+.rsvp-choice input:checked + .rsvp-choice-surface::before{
+  transform:scale(1.2);
+  opacity:.9;
+}
+
+.rsvp-choice-icon{
+  font-size:18px;
+  color:#d2d1bc;
+  line-height:1;
+}
+
+.rsvp-choice-title{
+  font-family:var(--ruqaa);
+  font-size:20px;
+  color:#f5f1e8;
+}
+
+.rsvp-choice-subtitle{
+  font-size:10px;
+  color:rgba(248,246,242,.52);
+}
+
+.rsvp-submit{
+  position:relative;
+  width:100%;
+  min-height:49px;
+  border:1px solid rgba(248,246,242,.55);
+  background:rgba(248,246,242,.04);
+  color:var(--cream);
+  padding:12px 34px;
+  font-size:17px;
+  cursor:pointer;
+  overflow:hidden;
+  transition:transform .28s ease,background .28s ease,color .28s ease,border-color .28s ease,box-shadow .28s ease;
+}
+
+.rsvp-submit::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  background:linear-gradient(110deg,transparent 20%,rgba(255,255,255,.14) 48%,transparent 76%);
+  transform:translateX(-120%);
+  transition:transform .55s ease;
+}
+
+.rsvp-submit:hover::before{
+  transform:translateX(120%);
+}
+
+.rsvp-submit:hover,
+.rsvp-submit:focus-visible{
+  background:var(--cream);
+  color:var(--olive);
+  border-color:var(--cream);
+  transform:translateY(-2px);
+  box-shadow:0 12px 32px rgba(8,16,11,.18);
+  outline:none;
+}
+
+.rsvp-submit:disabled{
+  opacity:.62;
+  cursor:wait;
+  transform:none;
+}
+
+.rsvp-form-status{
+  min-height:22px;
+  margin:13px 0 0;
+  text-align:center;
+  font-size:12px;
+  color:rgba(248,246,242,.68);
+}
+
+.rsvp-form-status.is-success{
+  color:#e8e5d7;
+}
+
+.rsvp-form-status.is-error{
+  color:#f1d5cf;
+}
+
+.rsvp-hidden-note{
+  display:none !important;
+}
+
+@media(max-width:430px){
+  .rsvp-section{min-height:82svh;padding:78px 15px}
+  .rsvp-content{padding:50px 10px 48px}
+  .rsvp-choice-list{gap:8px}
+  .rsvp-choice-surface{min-height:88px;padding:14px 7px}
+  .rsvp-choice-title{font-size:18px}
+  .rsvp-name-input{font-size:17px}
+}
