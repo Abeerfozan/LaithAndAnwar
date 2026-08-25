@@ -1,10 +1,9 @@
-/* Paper texture/background for every light (white/beige) invitation section. */
+/* Plain beige backgrounds + local invitation fonts. */
 :root{
-  --page-paper-image:url('assets/images/pege_background.png');
   --arabic:'AmiriLocal', serif;
+  --plain-beige:#f8f6f2;
 }
 
-/* Local Amiri font uploaded with the invitation — base Arabic font. */
 @font-face{
   font-family:'AmiriLocal';
   src:url('fonts/amiri.ttf') format('truetype');
@@ -13,7 +12,6 @@
   font-display:swap;
 }
 
-/* Local Aref Ruqaa font uploaded with the invitation. */
 @font-face{
   font-family:'ArefRuqaaLocal';
   src:url('fonts/ArefRuqaa.ttf') format('truetype');
@@ -22,7 +20,6 @@
   font-display:swap;
 }
 
-/* Use the uploaded font on all decorative Arabic headings/details. */
 .verse-card p,
 .copy-wrap h2,
 .event-intro,
@@ -35,43 +32,13 @@
   font-family:'ArefRuqaaLocal', serif;
 }
 
-/* Keep the dark/green sections unchanged. */
+/* Remove the uploaded paper texture everywhere it was used. */
 .invitation,
 .hero,
 .paper-panel,
 .invitation-copy,
-.closing{
-  background-color:var(--paper);
-  background-image:
-    linear-gradient(rgba(255,253,248,.10), rgba(255,253,248,.10)),
-    var(--page-paper-image);
-  background-repeat:no-repeat;
-  background-position:center center;
-  background-size:cover;
-}
-
-/* Remove the old light gradients so the uploaded paper artwork is visible. */
-.hero{
-  background-image:
-    linear-gradient(rgba(255,253,248,.08), rgba(255,253,248,.08)),
-    var(--page-paper-image);
-}
-
-.paper-panel,
-.invitation-copy,
-.closing{
-  background-image:
-    linear-gradient(rgba(255,253,248,.06), rgba(255,253,248,.06)),
-    var(--page-paper-image);
-}
-
-/* On taller sections, keep the texture visually continuous and natural. */
-@media (max-width:700px){
-  .hero,
-  .paper-panel,
-  .invitation-copy,
-  .closing{
-    background-position:center top;
-    background-size:cover;
-  }
+.closing,
+.date-tools{
+  background-color:var(--plain-beige) !important;
+  background-image:none !important;
 }
