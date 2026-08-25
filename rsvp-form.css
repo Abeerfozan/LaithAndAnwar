@@ -11,6 +11,16 @@
 .rsvp-intro{
   max-width:430px;
   margin:0 auto 32px !important;
+  font-size:0 !important;
+}
+
+.rsvp-intro::before{
+  content:"وجودكم معنا يصنع للفرحة معنى أجمل، يسعدنا تأكيد حضوركم.";
+  display:block;
+  font-family:var(--arabic);
+  font-size:21px;
+  line-height:1.7;
+  color:#deddd2;
 }
 
 .rsvp-form{
@@ -264,6 +274,7 @@
 @media(max-width:430px){
   .rsvp-section{min-height:82svh;padding:78px 15px}
   .rsvp-content{padding:50px 10px 48px}
+  .rsvp-intro::before{font-size:18px}
   .rsvp-choice-list{gap:8px}
   .rsvp-choice-surface{min-height:88px;padding:14px 7px}
   .rsvp-choice-title{font-size:18px}
