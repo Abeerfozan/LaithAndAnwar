@@ -1,6 +1,16 @@
 /* Paper texture/background for every light (white/beige) invitation section. */
 :root{
   --page-paper-image:url('assets/images/pege_background.png');
+  --arabic:'AmiriLocal', serif;
+}
+
+/* Local Amiri font uploaded with the invitation — base Arabic font. */
+@font-face{
+  font-family:'AmiriLocal';
+  src:url('fonts/amiri.ttf') format('truetype');
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
 }
 
 /* Local Aref Ruqaa font uploaded with the invitation. */
