@@ -1,4 +1,4 @@
-/* Swan hero: natural video ratio, then a tightly cropped bismallah strip, then the verse on plain beige. */
+/* Swan hero: natural video ratio, then a compact bismallah bridge, then the verse on plain beige. */
 .hero{
   min-height:0 !important;
   height:auto !important;
@@ -39,17 +39,17 @@
   -webkit-mask-image:linear-gradient(
     to bottom,
     #000 0%,
-    #000 72%,
-    rgba(0,0,0,.88) 82%,
-    rgba(0,0,0,.42) 93%,
+    #000 74%,
+    rgba(0,0,0,.9) 83%,
+    rgba(0,0,0,.48) 94%,
     transparent 100%
   );
   mask-image:linear-gradient(
     to bottom,
     #000 0%,
-    #000 72%,
-    rgba(0,0,0,.88) 82%,
-    rgba(0,0,0,.42) 93%,
+    #000 74%,
+    rgba(0,0,0,.9) 83%,
+    rgba(0,0,0,.48) 94%,
     transparent 100%
   );
 }
@@ -76,40 +76,38 @@
 
 .hero .record-disc{z-index:12}
 
-/* Short beige continuation directly under the video. */
+/* No exported-image whitespace here: the section starts immediately after the video. */
 .verse-section.dark-panel{
   min-height:auto !important;
   margin:0 !important;
-  padding:168px 20px 82px !important;
+  padding:112px 20px 78px !important;
   color:var(--olive) !important;
   background:#f8f6f2 !important;
   overflow:hidden;
 }
 
-/* bismallah.png is a tall Canva export. Show only its upper-middle calligraphy
-   area and discard the large empty lower part. */
+/* Render only the bismallah itself instead of the tall Canva export that contained blank space. */
 .verse-section::before{
-  content:"" !important;
-  display:block !important;
+  content:"بِسْمِ اللَّهِ الرَّحْمَٰنِ الرَّحِيمِ" !important;
   position:absolute;
   z-index:3;
-  top:-10px;
-  left:0;
-  right:0;
+  top:20px;
+  left:12px;
+  right:12px;
   bottom:auto !important;
-  width:100%;
-  height:170px;
-  pointer-events:none;
+  height:64px;
+  display:flex !important;
+  align-items:center;
+  justify-content:center;
   border:0 !important;
-  background-color:#f8f6f2 !important;
-  background-image:url('assets/images/bismallah.png') !important;
-  background-repeat:no-repeat !important;
-  background-size:100% auto !important;
-  background-position:center 39% !important;
-  opacity:.78;
-  filter:contrast(1.12);
-  -webkit-mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 92%,transparent 100%);
-  mask-image:linear-gradient(to bottom,transparent 0%,#000 8%,#000 92%,transparent 100%);
+  background:none !important;
+  color:rgba(63,76,67,.22);
+  font-family:'ArefRuqaaLocal',var(--ruqaa),serif;
+  font-size:clamp(31px,8vw,44px);
+  font-weight:400;
+  line-height:1;
+  white-space:nowrap;
+  pointer-events:none;
 }
 
 .verse-section .verse-card{
@@ -131,14 +129,13 @@
 
 @media(max-width:430px){
   .verse-section.dark-panel{
-    padding-top:158px !important;
+    padding:104px 18px 72px !important;
   }
 
   .verse-section::before{
-    top:-8px;
-    height:160px;
-    background-size:100% auto !important;
-    background-position:center 39% !important;
+    top:16px;
+    height:60px;
+    font-size:clamp(29px,8.2vw,38px);
   }
 }
 
