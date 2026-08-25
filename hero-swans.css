@@ -1,10 +1,13 @@
-/* First invitation page: swan video only behind the names and music disc. */
+/* First invitation page: keep the swan video at its natural aspect ratio,
+   preserve only the names + music disc, then blend softly into beige. */
 .hero{
-  min-height:100svh;
+  min-height:0 !important;
+  height:auto !important;
   display:grid;
   place-items:center;
   isolation:isolate;
-  background:#f7f3eb !important;
+  background:#f8f6f2 !important;
+  margin:0 0 -1px;
 }
 
 /* Remove every previous decorative hero background layer. */
@@ -19,21 +22,46 @@
   display:none !important;
 }
 
+/* Let the actual video ratio define the hero height — no full-screen stretching. */
 .hero-swans-video{
-  position:absolute;
-  inset:0;
+  position:relative;
+  inset:auto;
+  grid-area:1 / 1;
   z-index:1;
   width:100%;
-  height:100%;
+  height:auto;
+  max-height:none;
   display:block;
-  object-fit:cover;
+  object-fit:contain;
   object-position:center center;
   pointer-events:none;
   user-select:none;
   -webkit-user-drag:none;
 }
 
+/* Soft fade from the lower part of the video into the beige section below. */
+.hero::after{
+  content:"";
+  grid-area:1 / 1;
+  align-self:end;
+  justify-self:stretch;
+  z-index:2;
+  width:100%;
+  height:42%;
+  pointer-events:none;
+  background:linear-gradient(
+    to bottom,
+    rgba(248,246,242,0) 0%,
+    rgba(248,246,242,.18) 28%,
+    rgba(248,246,242,.62) 67%,
+    #f8f6f2 100%
+  );
+}
+
 .hero .names{
+  grid-area:1 / 1;
+  align-self:center;
+  justify-self:center;
   position:relative;
   z-index:4;
 }
@@ -45,6 +73,36 @@
 /* The music disc is injected by script.js and stays above the video. */
 .hero .record-disc{
   z-index:12;
+}
+
+/* The section immediately after the video is beige instead of green. */
+.verse-section.dark-panel{
+  margin-top:-1px;
+  color:var(--olive) !important;
+  background-color:#f8f6f2 !important;
+  background-image:
+    linear-gradient(rgba(255,253,248,.10),rgba(255,253,248,.10)),
+    url('assets/images/pege_background.png') !important;
+  background-repeat:no-repeat !important;
+  background-position:center top !important;
+  background-size:cover !important;
+}
+
+.verse-section::before{
+  border-color:rgba(63,76,67,.12) !important;
+}
+
+.verse-section .verse-card p{
+  color:var(--olive) !important;
+}
+
+.verse-section .verse-mark{
+  color:var(--sage) !important;
+}
+
+/* Keep the beige continuation visually seamless into the next paper section. */
+.verse-section + .invitation-copy{
+  margin-top:-1px;
 }
 
 @media(prefers-reduced-motion:reduce){
