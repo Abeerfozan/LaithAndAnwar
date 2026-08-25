@@ -1,3 +1,32 @@
+/* Load the local Amiri file as the base Arabic font from the first page render. */
+@font-face{
+  font-family:'AmiriLocal';
+  src:url('fonts/amiri.ttf') format('truetype');
+  font-style:normal;
+  font-weight:400;
+  font-display:swap;
+}
+
+@font-face{
+  font-family:'AmiriLocal';
+  src:url('fonts/amiri.ttf') format('truetype');
+  font-style:normal;
+  font-weight:700;
+  font-display:swap;
+}
+
+:root{
+  --arabic:'AmiriLocal','Amiri',serif;
+}
+
+body,
+input,
+textarea,
+select,
+button{
+  font-family:var(--arabic);
+}
+
 /* Keep the entire invitation in a phone-sized canvas on every screen. */
 html{
   background:#e7e5df;
